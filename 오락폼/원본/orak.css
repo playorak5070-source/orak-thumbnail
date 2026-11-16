@@ -1,0 +1,59 @@
+/* ============================================================
+   오락 5070 쇼츠 썸네일 공통 폼  1080 x 1920
+   이 파일은 고치지 않는다. 각 썸네일 HTML에서 불러다 쓴다.
+   ============================================================ */
+
+@font-face{
+  font-family:'OrakTitle';
+  src:url('폰트/NanumSquareNeo-Heavy.ttf');
+}
+
+:root{
+  --cream:#F4EEE1;   /* 바탕 */
+  --ink:#161412;     /* 제목 글자 */
+  --navy:#1F3F7A;    /* 부제 상자 */
+  --accent:#E0483A;  /* 숫자 강조 */
+  --y:#E8B12B;       /* 띠 노랑 */
+  --o:#E2582B;       /* 띠 주황 */
+}
+
+html,body{margin:0;background:#000}
+
+.t{
+  position:relative; width:1080px; height:1920px; overflow:hidden;
+  background:var(--cream); color:var(--ink);
+  font-family:'OrakTitle',sans-serif;
+}
+
+/* 위쪽 3색 띠 — 오른쪽 끝에서 600px */
+.stripe-top{position:absolute;top:0;right:0;width:600px;height:24px;display:flex}
+/* 사진 위 3색 띠 — 가로 전체 */
+.stripe-mid{position:absolute;top:820px;left:0;width:1080px;height:22px;display:flex}
+.stripe-top i,.stripe-mid i{flex:1}
+.c1{background:var(--y)} .c2{background:var(--navy)} .c3{background:var(--o)}
+
+/* 나뭇잎 장식 — 위치 고정 */
+.leaf-r{position:absolute;top:56px;right:60px}
+.leaf-l{position:absolute;top:-70px;left:22px}
+
+/* 로고 — 왼쪽 위 고정. 안전영역(위에서 14%=269px) 안이라 업로드해도 안 잘린다 */
+.logo{position:absolute;top:276px;left:86px;width:126px;height:126px;border-radius:26px}
+
+/* 제목 블록 — 로고 아래, 좌우 8%(86px) 여백 */
+.title{
+  position:absolute;top:416px;left:86px;right:86px;height:420px;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  gap:10px;text-align:center;letter-spacing:-2px;
+}
+.l1{font-size:138px;line-height:1.08;white-space:nowrap}
+.l2{font-size:117px;line-height:1.08;white-space:nowrap}
+.ac{color:var(--accent)}
+
+/* 부제 상자 — 있으면 제목 아래. 없어도 된다 */
+.sub{
+  margin-top:10px;padding:14px 30px 18px;background:var(--navy);color:#fff;
+  border-radius:16px;font-size:56px;line-height:1.2;letter-spacing:-2px;white-space:nowrap;
+}
+
+/* 사진 — 아래 1078px 고정 */
+.photo{position:absolute;top:842px;left:0;width:1080px;height:1078px;object-fit:cover;object-position:50% 50%}

@@ -1,0 +1,27 @@
+<!doctype html><meta charset="utf-8">
+<style>
+@font-face{font-family:'OrakTitle';src:url('폰트/NanumSquareNeo-Heavy.ttf');}
+body{margin:0;background:#fff;font-family:'Malgun Gothic',sans-serif;font-size:19px;width:1000px}
+table{border-collapse:collapse;width:100%} td,th{padding:5px 9px;border-bottom:1px solid #ddd;text-align:left}
+.m{font-family:'OrakTitle';letter-spacing:-2px;white-space:nowrap;position:absolute;visibility:hidden}
+.ok{color:#128a3a;font-weight:700}.no{color:#c2271a;font-weight:700}
+</style>
+<div id=out>측정 중…</div>
+<script>
+const L1=["그 시절","동네 모임 장소","11월에 먹어야","동네 모임 찾는","관심사 하나","고르고, 보고","걸어서 가는","성격 탓이","또 나오는"];
+const L2=["겨울 풍경 5가지","고르는 4가지 기준","제맛인 음식 6가지","4단계 미리보기","골랐을 뿐인데","신청하고 만나기","동네 모임 4단계","아닙니다 3가지","사람은 다릅니다"];
+const SUB=["도시락을 난로 위에 올려 본 세대라면","이웃과 함께 정해요","장보기 전에 꼭 저장하세요","이제 이렇게 찾습니다","동네 약속이 생겼습니다","동네 모임 찾는 4단계","준비하고 있어요","50 이후 친구 사귀기","첫날 이 한마디"];
+const LIMIT=908, SUBLIMIT=908-60; // 부제는 좌우 패딩 30px씩
+function w(txt,size){const d=document.createElement('div');d.className='m';d.style.fontSize=size+'px';d.textContent=txt;document.body.appendChild(d);const r=d.getBoundingClientRect().width;d.remove();return Math.round(r);}
+document.fonts.load("900 100px OrakTitle").then(()=>document.fonts.ready).then(()=>{
+ let h='<table><tr><th>줄</th><th>글</th>';
+ const S1=[118,126,132,138,144], S2=[106,114,120,126,132], S3=[52,56,60,64];
+ S1.forEach(s=>h+=`<th>${s}px</th>`); h+='</tr>';
+ L1.forEach((t,i)=>{h+=`<tr><td>1줄</td><td>${t}</td>`;S1.forEach(s=>{const x=w(t,s);h+=`<td class="${x<=LIMIT?'ok':'no'}">${x}</td>`});h+='</tr>';});
+ h+='<tr><th>줄</th><th>글</th>'; S2.forEach(s=>h+=`<th>${s}px</th>`); h+='</tr>';
+ L2.forEach((t,i)=>{h+=`<tr><td>2줄</td><td>${t}</td>`;S2.forEach(s=>{const x=w(t,s);h+=`<td class="${x<=LIMIT?'ok':'no'}">${x}</td>`});h+='</tr>';});
+ h+='<tr><th>줄</th><th>글</th>'; S3.forEach(s=>h+=`<th>${s}px</th>`); h+='</tr>';
+ SUB.forEach((t,i)=>{h+=`<tr><td>부제</td><td>${t}</td>`;S3.forEach(s=>{const x=w(t,s);h+=`<td class="${x<=SUBLIMIT?'ok':'no'}">${x}</td>`});h+='</tr>';});
+ h+='</table><p>한계: 제목 908px · 부제 848px(좌우 안쪽 여백 30px씩)</p>';
+ document.getElementById('out').innerHTML=h;});
+</script>

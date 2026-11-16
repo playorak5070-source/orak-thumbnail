@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>오락 썸네일 작업판</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* 레이아웃: 위에 현황 한 줄, 가운데 추천 두 장 크게, 아래 일곱 장 격자 */
+:root{
+  --bg:#F4EEE1; --surface:#FFFBF2; --line:#DED3BE;
+  --ink:#1B1814; --ink2:#5E5546;
+  --navy:#1F3F7A; --accent:#D8402F; --yellow:#C98E12; --green:#2E6B46;
+  --font:'Noto Sans KR',system-ui,'Malgun Gothic',sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150F; --surface:#221F18; --line:#3A352A;
+  --ink:#F2EDE1; --ink2:#B3AA98;
+  --navy:#7FA3E0; --accent:#F0745F; --yellow:#E8B12B; --green:#6FC08F;
+  color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#17150F; --surface:#221F18; --line:#3A352A;
+  --ink:#F2EDE1; --ink2:#B3AA98;
+  --navy:#7FA3E0; --accent:#F0745F; --yellow:#E8B12B; --green:#6FC08F;
+  color-scheme:dark;}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);
+  font-size:17px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:1040px;margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:32px 72px}
+
+.stripe{display:flex;height:10px;margin-bottom:26px;border-radius:5px;overflow:hidden}
+.stripe i{flex:1}
+.s1{background:var(--yellow)}.s2{background:var(--navy)}.s3{background:var(--accent)}
+
+h1{font-weight:900;font-size:clamp(28px,6vw,40px);line-height:1.2;margin:0 0 6px;
+  letter-spacing:-.02em;text-wrap:balance}
+.sub{color:var(--ink2);font-size:16px;margin:0 0 24px}
+.order{color:var(--ink2);font-size:14px;margin:0 0 26px;padding:8px 14px;
+  background:var(--surface);border:1px dashed var(--line);border-radius:10px;display:inline-block}
+.when{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.06em;
+  color:#fff;background:var(--navy);padding:3px 10px;border-radius:999px;margin-bottom:8px}
+
+.state{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:34px}
+.chip{display:flex;align-items:baseline;gap:8px;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.chip b{font-size:26px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+.chip span{font-size:14px;color:var(--ink2)}
+.chip.done b{color:var(--green)}
+.chip.wait b{color:var(--accent)}
+
+h2{font-weight:900;font-size:22px;margin:0 0 4px;letter-spacing:-.01em}
+.note{color:var(--ink2);font-size:15px;margin:0 0 18px}
+section{margin-bottom:48px}
+
+.pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+  overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.card.star{border-color:var(--navy);border-width:2px}
+.card img{display:block;width:100%;max-width:100%;height:auto;border-bottom:1px solid var(--line)}
+.body{padding:14px 16px 18px;display:flex;flex-direction:column;gap:6px}
+.where{font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--navy)}
+.card.star .where{color:var(--accent)}
+.name{font-weight:700;font-size:17px;line-height:1.35}
+.file{font-size:13px;color:var(--ink2);word-break:break-all}
+.meta{font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+.cell{min-width:0}
+.cell img{display:block;width:100%;max-width:100%;height:auto;
+  border:1px solid var(--line);border-radius:10px}
+.cell .name{font-size:14px;font-weight:700;margin-top:8px;line-height:1.35}
+.cell .meta{font-size:12px}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;
+  background:var(--navy);color:#fff;margin-top:5px}
+.tag.old{background:transparent;color:var(--ink2);border:1px solid var(--line)}
+
+ol.fix{list-style:none;margin:0;padding:0;counter-reset:f;
+  display:flex;flex-direction:column;gap:14px}
+ol.fix li{counter-increment:f;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:14px 16px;display:flex;gap:14px;min-width:0}
+ol.fix li::before{content:counter(f);flex:none;width:30px;height:30px;border-radius:50%;
+  background:var(--navy);color:#fff;font-weight:900;font-size:15px;
+  display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
+ol.fix .t{font-weight:700;display:block;margin-bottom:2px}
+ol.fix .d{color:var(--ink2);font-size:15px}
+
+.warn{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);
+  border-radius:14px;padding:16px 18px}
+.warn .t{font-weight:900;color:var(--accent);margin:0 0 6px}
+.warn p{margin:0 0 8px}
+.warn p:last-child{margin:0}
+
+table{border-collapse:collapse;width:100%;font-size:15px}
+.scroll{overflow-x:auto}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:13px;color:var(--ink2);font-weight:700;letter-spacing:.04em}
+td.num{font-variant-numeric:tabular-nums}
+tr.best td{font-weight:700;color:var(--green)}
+
+footer{color:var(--ink2);font-size:14px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <div class="stripe"><i class="s1"></i><i class="s2"></i><i class="s3"></i></div>
+
+  <h1>오락 5070 썸네일 작업판</h1>
+  <p class="sub">2026년 11월 16일 기준 · 11월 17일(화) 편 확정 + 다음 편 제목 벤치마킹</p>
+
+  <div class="state">
+    <div class="chip done"><b>11</b><span>장 완성</span></div>
+    <div class="chip done"><b>2</b><span>장 업로드 확정</span></div>
+    <div class="chip wait"><b>1</b><span>건 남음 · 사진</span></div>
+  </div>
+  <p class="order">↓ 최근에 한 일이 맨 위에 있습니다</p>
+
+  <section>
+    <div class="when">방금</div>
+    <h2>「걸어서 가는 동네 모임 찾기」</h2>
+    <p class="note">주신 문구 그대로 넣으려다 한 단어를 줄였습니다. 아래에 이유를 적었습니다.</p>
+    <div class="pick">
+      <div class="card star">
+        <img src="img/t11.jpg" alt="걸어서 가는 동네 모임 찾기 썸네일">
+        <div class="body">
+          <div class="where">유튜브 쇼츠</div>
+          <div class="name">걸어서 가는<br>동네 모임 <span style="color:var(--accent)">찾기</span></div>
+          <div class="file">11_걸어서가는_4가지.png</div>
+          <div class="meta">사진 6.00초 · 가장 선명한 구간</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="body" style="padding:18px">
+          <div class="where" style="color:var(--accent)">한 단어를 줄였습니다</div>
+          <div class="scroll" style="margin:8px 0 0">
+            <table>
+              <tr><th>글</th><th>폭</th><th>한계</th><th></th></tr>
+              <tr><td>동네 모임 찾는 방법</td><td class="num">953</td><td class="num">908</td><td style="color:var(--accent)"><b>넘침</b></td></tr>
+              <tr class="best"><td>동네 모임 찾기</td><td class="num">708</td><td class="num">908</td><td><b>들어감</b></td></tr>
+            </table>
+          </div>
+          <p class="note" style="margin:12px 0 0">글자 크기를 줄이면 다른 썸네일과 통일이 깨지고 5070 가독성도 떨어집니다.
+          그래서 <b>크기가 아니라 글을 줄였습니다.</b> 뜻은 그대로입니다.</p>
+          <p class="note" style="margin:10px 0 0">붉은 글자는 「찾기」에 줬습니다. 부제 상자는 남색 바탕에 흰 글씨라
+          숫자에 붉은색을 넣으면 안 보입니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="when">조금 전</div>
+    <h2>추천 제목으로 쇼츠 썸네일 한 장</h2>
+    <p class="note">11/17 편 추천 유튜브 제목을 그대로 썸네일로 옮겼습니다.</p>
+    <div class="pick">
+      <div class="card star">
+        <img src="img/t10.jpg" alt="동네 모임, 이제 이렇게 찾습니다 썸네일">
+        <div class="body">
+          <div class="where">유튜브 쇼츠</div>
+          <div class="name">동네 모임, 이제<br><span style="color:var(--accent)">이렇게</span> 찾습니다</div>
+          <div class="file">10_동네모임_이렇게.png</div>
+          <div class="meta">1줄 878px · 2줄 790px · 부제 420px</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="body" style="padding:18px">
+          <div class="where">왜 이렇게 나눴나</div>
+          <p class="note" style="margin:6px 0 0">「이제 이렇게 찾습니다」를 한 줄에 넣으면 <b>1035px</b>로 한계(908px)를 넘어 잘립니다.
+          그래서 「이제」를 1줄 끝으로 올렸습니다.</p>
+          <p class="note" style="margin:10px 0 0">붉은 글자는 <b>「이렇게」</b>에 줬습니다. 「어떻게?」를 묻게 만드는 자리라,
+          핵심을 가리는 말이 상위권에 2.5배 몰렸던 그 자리입니다.</p>
+          <p class="note" style="margin:10px 0 0">부제 「딱 4단계면 됩니다」는 숨긴 것의 <b>크기만</b> 알려 줍니다. 제목과 겹치는 단어가 없습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="when">오늘 오후 4시</div>
+    <h2>글자를 한계까지 키웠습니다</h2>
+    <p class="note">실제 유튜브 화면에서 「5070이 읽기 어렵다」는 지적을 받고, 안전구역 안에서 최대로 키웠습니다.</p>
+    <div class="scroll">
+      <table>
+        <tr><th>줄</th><th>전</th><th>후</th><th>한계</th><th>무엇에 막히나</th></tr>
+        <tr><td>1줄</td><td class="num">118px</td><td class="num"><b>138px</b></td><td class="num">144px</td><td>「동네 모임 장소」 875px</td></tr>
+        <tr class="best"><td>2줄</td><td class="num">106px</td><td class="num"><b>117px</b></td><td class="num">118px</td><td>9글자 줄 — 이미 한계</td></tr>
+        <tr class="best"><td>부제</td><td class="num">52px</td><td class="num"><b>56px</b></td><td class="num">56px</td><td>「도시락을 난로 위에…」 — 이미 한계</td></tr>
+      </table>
+    </div>
+    <p class="note" style="margin-top:14px">쓸 수 있는 폭은 <b>제목 908px · 부제 848px</b>입니다. 감으로 정하지 않고 모든 줄을 크기별로 실제로 쟀습니다.
+    <b>2줄과 부제는 더 키우면 잘립니다.</b> 더 크게 보이고 싶으면 크기가 아니라 글을 줄입니다.</p>
+    <p class="note">9장 모두 다시 뽑았고, 업로드본 4장도 바꿨습니다.</p>
+  </section>
+
+  <section>
+    <div class="when">오늘 오후</div>
+    <h2>새로 만든 것 — 조회수 잘 나오는 제목을 분석해 뽑았습니다</h2>
+    <p class="note">시니어 채널 10곳 영상 473개를 모아 한국어 제목 174개를 분석한 뒤 만든 두 장입니다.</p>
+    <div class="pick">
+      <div class="card star">
+        <img src="img/t09.jpg" alt="또 나오는 사람은 다릅니다 썸네일">
+        <div class="body">
+          <div class="where">유튜브 제목</div>
+          <div class="name">모임에 또 나오는 사람은<br><span style="color:var(--accent)">'이것'</span>을 합니다</div>
+          <div class="file">09_또나오는사람.png</div>
+          <div class="meta">39폭 · 사람 가르기 + 지시대명사</div>
+        </div>
+      </div>
+      <div class="card star">
+        <img src="img/t08.jpg" alt="성격 탓이 아닙니다 3가지 썸네일">
+        <div class="body">
+          <div class="where">유튜브 제목</div>
+          <div class="name">50 이후 친구가 안 생기는<br>진짜 이유 <span style="color:var(--accent)">3가지</span></div>
+          <div class="file">08_50이후친구_3가지.png</div>
+          <div class="meta">40폭 · 나이 호명 + 숫자</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>눌리게 만드는 설계</h2>
+    <p class="note">상위 제목 일곱 개가 전부 같은 구조였습니다.</p>
+    <div class="warn" style="border-left-color:var(--navy)">
+      <p class="t" style="color:var(--navy)">사람을 둘로 가르고, 가르는 기준은 숨긴다</p>
+      <p>독자는 정보가 궁금해서가 아니라 <b>자기가 어느 쪽인지 확인하려고</b> 누릅니다.
+      「또 나오는 사람」과 「한 번 가고 마는 사람」으로 갈라 놓으면, 모임에 나가 본 사람은 확인하러 들어옵니다.</p>
+    </div>
+    <div class="scroll" style="margin-top:18px">
+      <table>
+        <tr><th>제목에 쓰는 장치</th><th>전체</th><th>상위권</th><th>쏠림</th></tr>
+        <tr class="best"><td>핵심을 '이것'으로 가리기</td><td class="num">6%</td><td class="num">16%</td><td class="num">2.5배</td></tr>
+        <tr class="best"><td>반말 단정형 「~한다」</td><td class="num">6%</td><td class="num">16%</td><td class="num">2.5배</td></tr>
+        <tr><td>숫자 들어감</td><td class="num">35%</td><td class="num">44%</td><td class="num">1.3배</td></tr>
+        <tr><td>나이·세대 호명</td><td class="num">29%</td><td class="num">36%</td><td class="num">1.3배</td></tr>
+        <tr><td>존댓말 종결</td><td class="num">11%</td><td class="num">12%</td><td class="num">1.1배</td></tr>
+        <tr><td style="color:var(--accent)"><b>느낌표</b></td><td class="num">13%</td><td class="num">4%</td><td class="num" style="color:var(--accent)"><b>0.3배 역효과</b></td></tr>
+      </table>
+    </div>
+    <p class="note" style="margin-top:16px"><b>문어체냐 구어체냐</b> — 숫자만 보면 반말이 2.5배지만, 오락은 출시 전 브랜드 채널이라
+    「~해라」를 쓰면 5070 독자에게 무례하게 읽힙니다. <b>존댓말은 유지하되 종결을 단정형으로</b> 가는 것이 답입니다.
+    「준비하고 있어요」(약함) → 「~입니다」(단정).</p>
+  </section>
+
+  <section>
+    <div class="warn">
+      <p class="t">남은 것 하나 — 사진</p>
+      <p>위 두 장은 <b>이미 쓴 사진을 돌려썼습니다.</b> 09번은 04번과, 08번은 02번과 같은 사진입니다.
+      채널 목록에 나란히 뜨면 같은 영상을 두 번 올린 것처럼 보입니다.</p>
+      <p>무료 사이트 <b>세 곳을 검색어 14개로</b> 찾았지만 오락에 맞는 한국 50대 사진이 없었습니다
+      (Pexels는 70~80대 다큐멘터리풍, Unsplash는 한복 사진, Pixabay는 서양 노부부와 일러스트).
+      그래서 <b>클링으로 만들 장면 두 개</b>를 프롬프트로 써 뒀습니다.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="when">오늘 오후 2시</div>
+    <h2>11/17 편 — 이것을 올리시면 됩니다</h2>
+    <p class="note">사진 초점이 가장 선명한 구간에서 뽑은 두 장입니다.</p>
+    <div class="pick">
+      <div class="card star">
+        <img src="img/t06.jpg" alt="고르고, 보고 신청하고 만나기 썸네일">
+        <div class="body">
+          <div class="where">유튜브 쇼츠</div>
+          <div class="name">고르고, 보고<br>신청하고 <span style="color:var(--accent)">만나기</span></div>
+          <div class="file">06_오락4단계_쇼츠B.png</div>
+          <div class="meta">사진 6.00초 · 선명도 209</div>
+        </div>
+      </div>
+      <div class="card star">
+        <img src="img/t07.jpg" alt="걸어서 가는 동네 모임 4단계 썸네일">
+        <div class="body">
+          <div class="where">인스타그램 릴스</div>
+          <div class="name">걸어서 가는<br>동네 모임 <span style="color:var(--accent)">4단계</span></div>
+          <div class="file">07_오락4단계_릴스B.png</div>
+          <div class="meta">사진 8.50초 · 「준비하고 있어요」</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="warn">
+      <p class="t">05번은 쓰지 않습니다</p>
+      <p><b>주제캡션.md</b>에 「관심사 하나 골랐을 뿐인데, 약속이 생겼습니다」를 바꾼 기록이 있습니다. 이유는 <b>출시 전 서비스인데 실제로 써 본 후기처럼 읽힌다</b>는 것이었습니다.</p>
+      <p>05번 썸네일도 같은 과거형(<b>생겼습니다</b>)이라 같은 문제가 있습니다. 그래서 릴스용은 <b>07번</b>으로 정했습니다. 07번의 「준비하고 있어요」는 준비 중임을 분명히 말합니다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>지금까지 만든 열한 장</h2>
+    <p class="note">모두 <b>바탕화면 ▸ 썸네일_작업 ▸ 오락폼</b> 에 있습니다.</p>
+    <div class="grid">
+      <div class="cell"><img src="img/t01.jpg" alt="그 시절 겨울 풍경 5가지">
+        <div class="name">그 시절<br>겨울 풍경 5가지</div>
+        <div class="meta">01번</div><span class="tag old">이전 편</span></div>
+      <div class="cell"><img src="img/t02.jpg" alt="동네 모임 장소 고르는 4가지 기준">
+        <div class="name">동네 모임 장소<br>고르는 4가지 기준</div>
+        <div class="meta">02번</div><span class="tag old">이전 편</span></div>
+      <div class="cell"><img src="img/t03.jpg" alt="11월에 먹어야 제맛인 음식 6가지">
+        <div class="name">11월에 먹어야<br>제맛인 음식 6가지</div>
+        <div class="meta">03번</div><span class="tag old">이전 편</span></div>
+      <div class="cell"><img src="img/t04.jpg" alt="동네 모임 찾는 4단계 미리보기">
+        <div class="name">동네 모임 찾는<br>4단계 미리보기</div>
+        <div class="meta">04번 · 7.50초</div><span class="tag">쇼츠 후보</span></div>
+      <div class="cell"><img src="img/t05.jpg" alt="관심사 하나 골랐을 뿐인데">
+        <div class="name">관심사 하나<br>골랐을 뿐인데</div>
+        <div class="meta">05번 · 4.50초</div><span class="tag" style="background:var(--accent)">안 씀 · 문구</span></div>
+      <div class="cell"><img src="img/t06.jpg" alt="고르고 보고 신청하고 만나기">
+        <div class="name">고르고, 보고<br>신청하고 만나기</div>
+        <div class="meta">06번 · 6.00초</div><span class="tag">쇼츠 추천</span></div>
+      <div class="cell"><img src="img/t07.jpg" alt="걸어서 가는 동네 모임 4단계">
+        <div class="name">걸어서 가는<br>동네 모임 4단계</div>
+        <div class="meta">07번 · 8.50초</div><span class="tag">릴스 추천</span></div>
+      <div class="cell"><img src="img/t08.jpg" alt="성격 탓이 아닙니다 3가지">
+        <div class="name">성격 탓이<br>아닙니다 3가지</div>
+        <div class="meta">08번 · 새 주제</div><span class="tag">제목 분석 반영</span></div>
+      <div class="cell"><img src="img/t09.jpg" alt="또 나오는 사람은 다릅니다">
+        <div class="name">또 나오는<br>사람은 다릅니다</div>
+        <div class="meta">09번 · 새 주제</div><span class="tag">제목 분석 반영</span></div>
+      <div class="cell"><img src="img/t10.jpg" alt="동네 모임, 이제 이렇게 찾습니다">
+        <div class="name">동네 모임, 이제<br>이렇게 찾습니다</div>
+        <div class="meta">10번 · 11/17 편</div><span class="tag">추천 제목</span></div>
+      <div class="cell"><img src="img/t11.jpg" alt="걸어서 가는 동네 모임 찾기">
+        <div class="name">걸어서 가는<br>동네 모임 찾기</div>
+        <div class="meta">11번 · 11/17 편</div><span class="tag">새로 만듦</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>검수에서 고친 것</h2>
+    <p class="note">사진만 손봤습니다. 공통 폼(<b>orak.css</b>)은 한 글자도 건드리지 않았고, 원본 사진도 모두 남겼습니다.</p>
+    <ol class="fix">
+      <li><div><span class="t">07번 사진이 흐렸습니다</span>
+        <span class="d">13.50초 장면은 선명도 16으로 다른 셋의 5분의 1이었습니다. 같은 영상 8.50초 장면으로 바꿨습니다.</span></div></li>
+      <li><div><span class="t">02번 메모지에 엉터리 한글</span>
+        <span class="d">「등네 사랑방」「가제운 곳」「편짠한 공간」「찰리적인 가격」「아늑한 분홲기」가 읽혔습니다. 아래쪽을 초점 빠진 것처럼 흐리게 했습니다.</span></div></li>
+      <li><div><span class="t">03번 팻말이 「가울무」</span>
+        <span class="d">그 팻말만 흐리게 했습니다. 굴·방어·꼬막·고구마는 맞는 글자라 그대로 뒀습니다.</span></div></li>
+      <li><div><span class="t">01번에 깨진 글자 다섯 곳</span>
+        <span class="d">앞서 세 곳을 지웠는데 빨간 간판·초록 글자·세로쓰기 세 곳이 남아 있었습니다. 모두 지웠습니다.</span></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>다음에 쓸 때</h2>
+    <p class="note"><b>영상01.mp4</b>를 0.25초 간격으로 선명도를 잰 결과입니다. 10초 이후는 쓰지 않습니다.</p>
+    <div class="scroll">
+      <table>
+        <tr><th>구간</th><th>선명도</th><th>쓴 곳</th></tr>
+        <tr><td class="num">4.50초</td><td class="num">198</td><td>05번 릴스</td></tr>
+        <tr class="best"><td class="num">6.00초</td><td class="num">209</td><td>06번 쇼츠 — 가장 선명</td></tr>
+        <tr><td class="num">7.50초</td><td class="num">79</td><td>04번</td></tr>
+        <tr><td class="num">8.50초</td><td class="num">—</td><td>07번</td></tr>
+        <tr><td class="num">10.00초 이후</td><td class="num">16</td><td>초점 나감 · 쓰지 않음</td></tr>
+      </table>
+    </div>
+    <p class="note" style="margin-top:14px">크롬이 예전 사진을 기억해 다시 뽑아도 PNG가 안 바뀌는 일이 있었습니다. 사진을 바꿨는데 그대로면 이 때문입니다.</p>
+  </section>
+
+  <footer>
+    업로드는 직접 하시면 됩니다. 저는 유튜브·인스타그램에 올리지 않았습니다.<br>
+    자세한 기록은 <b>썸네일_작업 ▸ 작업기록.md</b> 에 있습니다.
+  </footer>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>신한지주 썸네일 B — 숫자 하나</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root{ --ink:#121212; --cream:#F3EDE1; --crimson:#C8102E; --steel:#2B3448; }
+html,body{margin:0;background:#000}
+.t{position:relative;width:1280px;height:720px;overflow:hidden;background:var(--cream);
+   font-family:'PretendardBlack',sans-serif;color:var(--ink)}
+/* 종이 질감 선 */
+.rule{position:absolute;left:0;right:0;height:4px;background:var(--ink)}
+.photo{position:absolute;top:-8px;right:-8px;width:446px;height:736px;
+   background:url('bg_right.jpg') center bottom/cover no-repeat;
+   filter:grayscale(1) contrast(1.1) blur(6px); opacity:.12}
+.vbar{position:absolute;top:0;right:430px;width:8px;height:720px;background:var(--crimson)}
+.wrap{position:absolute;left:62px;top:110px;width:780px}
+.kicker{display:flex;align-items:center;gap:14px;font-size:56px;letter-spacing:-2px;color:var(--steel)}
+.kicker .dn{color:var(--steel);font-size:60px}
+.name{margin-top:10px;font-size:104px;letter-spacing:-6px;line-height:1}
+.huge{margin-top:-4px;font-size:228px;letter-spacing:-14px;line-height:.95;color:var(--crimson)}
+.huge .pct{font-size:146px;letter-spacing:-7px}
+.tag{display:inline-block;margin-top:18px;padding:12px 30px 17px;background:var(--ink);color:var(--cream);
+   font-size:62px;letter-spacing:-3px;border-radius:7px}
+</style>
+</head>
+<body>
+<div class="t">
+  <div class="photo"></div>
+  <div class="vbar"></div>
+  <div class="rule" style="top:0"></div>
+  <div class="rule" style="bottom:0"></div>
+  <div class="wrap">
+    <div class="kicker"><span class="dn">▼</span><span>코스피 −1.89%</span></div>
+    <div class="name">신한지주</div>
+    <div class="huge">+5.65<span class="pct">%</span></div>
+    <div class="tag">혼자 올랐다</div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>신한지주 썸네일 C — 대비 분할</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root{ --dark:#0E1830; --warm:#F6D34A; --ink:#14100A; --crimson:#C8102E; --steel:#8FA8D4; }
+html,body{margin:0;background:#000}
+.t{position:relative;width:1280px;height:720px;overflow:hidden;
+   font-family:'PretendardBlack',sans-serif}
+.half{position:absolute;top:0;height:720px;overflow:hidden}
+
+/* 왼쪽 — 코스피 하락 (조연) */
+.L{left:0;width:614px;background:var(--dark);color:#fff;
+   clip-path:polygon(0 0,100% 0,calc(100% - 88px) 100%,0 100%)}
+.L .grid{position:absolute;inset:0;opacity:.2;
+   background-image:linear-gradient(rgba(143,168,212,.45) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(143,168,212,.45) 1px,transparent 1px);
+   background-size:72px 72px}
+.L .chart{position:absolute;left:-10px;bottom:0;width:560px;height:300px;opacity:.30}
+
+/* 오른쪽 — 신한지주 상승 (주연) */
+.R{right:0;width:706px;background:var(--warm);color:var(--ink)}
+.R .ph{position:absolute;inset:0;
+   background:url('bg_right.jpg') -60px bottom/1060px auto no-repeat;
+   filter:saturate(.45) brightness(1.1);opacity:.10;
+   -webkit-mask-image:linear-gradient(0deg,#000 50%,transparent 88%)}
+.R .chart{position:absolute;right:-34px;bottom:-34px;width:600px;height:470px;opacity:.3}
+
+/* 사선 경계 */
+.seam{position:absolute;top:0;left:526px;width:1280px;height:720px;z-index:4;pointer-events:none}
+
+.in{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center;z-index:3}
+.L .in{top:236px;padding-right:76px}
+.R .in{top:188px;padding-left:58px}
+.lbl{letter-spacing:-4px}
+.val{letter-spacing:-7px;line-height:1}
+.L .lbl{font-size:52px;color:#D7E2F6}
+.L .arw{font-size:62px;line-height:.9;margin:6px 0 0;color:var(--steel)}
+.L .val{font-size:104px;color:#B9C9E8}
+.R .lbl{font-size:66px;color:var(--ink)}
+.R .arw{font-size:78px;line-height:.9;margin:8px 0 0;color:var(--crimson)}
+.R .val{font-size:158px;color:var(--crimson);letter-spacing:-9px;
+   text-shadow:0 6px 0 rgba(20,16,10,.16)}
+.sub{margin-top:28px;padding:11px 30px 17px;background:var(--ink);color:var(--warm);
+   font-size:56px;letter-spacing:-2px;border-radius:8px}
+
+.why{position:absolute;left:556px;top:38px;width:110px;height:110px;border-radius:50%;
+   background:var(--warm);border:8px solid var(--ink);display:flex;align-items:center;justify-content:center;
+   font-size:60px;color:var(--ink);box-shadow:0 12px 26px rgba(0,0,0,.5);z-index:6;letter-spacing:-4px}
+</style>
+</head>
+<body>
+<div class="t">
+
+  <div class="half L">
+    <div class="grid"></div>
+    <svg class="chart" viewBox="0 0 560 430" fill="none" aria-hidden="true">
+      <polyline points="10,60 80,110 140,80 210,170 275,140 340,250 405,220 470,330 545,410"
+        stroke="#8FA8D4" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"/>
+      <polygon points="545,410 505,352 585,352" fill="#8FA8D4" transform="rotate(37 545 410)"/>
+    </svg>
+    <div class="in">
+      <div class="lbl">코스피</div>
+      <div class="arw">▼</div>
+      <div class="val">−1.89%</div>
+    </div>
+  </div>
+
+  <div class="half R">
+    <div class="ph"></div>
+    <svg class="chart" viewBox="0 0 600 470" fill="none" aria-hidden="true">
+      <polyline points="20,440 110,400 190,420 280,300 360,330 440,190 520,210 582,70"
+        stroke="#C8102E" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>
+      <polygon points="582,62 536,132 628,132" fill="#C8102E" opacity=".55"/>
+    </svg>
+    <div class="in">
+      <div class="lbl">신한지주</div>
+      <div class="arw">▲</div>
+      <div class="val">+5.65%</div>
+      <div class="sub">같은 날, 반대로</div>
+    </div>
+  </div>
+
+  <svg class="seam" viewBox="0 0 1280 720" fill="none" aria-hidden="true">
+    <line x1="88" y1="0" x2="0" y2="720" stroke="#14100A" stroke-width="12"/>
+    <line x1="96" y1="0" x2="8" y2="720" stroke="#F6D34A" stroke-width="3" opacity=".5"/>
+  </svg>
+
+  <div class="why">왜?</div>
+</div>
+</body>
+</html>
