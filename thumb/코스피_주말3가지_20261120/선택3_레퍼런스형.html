@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=3840,initial-scale=1">
+  <title>선택 3 레퍼런스형</title>
+  <style>
+    @font-face{font-family:Gmarket;src:url('./fonts/GmarketSansBold.otf') format('opentype');font-weight:700}
+    @font-face{font-family:Gmarket;src:url('./fonts/GmarketSansMedium.otf') format('opentype');font-weight:500}
+    *{box-sizing:border-box}html,body{margin:0;width:3840px;height:2160px;overflow:hidden}
+    body{font-family:Gmarket,sans-serif;font-weight:700;color:#fff;background:#071a33}
+    .canvas{position:relative;width:3840px;height:2160px;overflow:hidden;background:radial-gradient(circle at 18% 12%,#173c62 0%,#071a33 42%,#041326 100%)}
+    .accent{position:absolute;left:0;top:0;bottom:0;width:39px;background:#ffd54a}
+    .copy{position:absolute;inset:0;z-index:3}
+    .pill{position:absolute;left:195px;right:195px;top:168px;height:144px;border-radius:72px;padding:30px 72px;background:#173b61;color:#d7e7f5;font-size:75px;letter-spacing:-3px}
+    .main{position:absolute;left:195px;top:405px;width:2050px}
+    .line1{font-size:225px;line-height:1.1;letter-spacing:-12px;color:#ffd54a;white-space:nowrap}
+    .line2{font-size:255px;line-height:1.13;letter-spacing:-15px;margin-top:36px;white-space:nowrap}
+    .badge{display:inline-flex;align-items:center;height:282px;border-radius:60px;padding:0 102px;margin-top:88px;background:#d93b34;box-shadow:0 39px 84px #030b17a8;font-size:150px;letter-spacing:-9px}
+    .footer{position:absolute;left:195px;bottom:168px;font-size:72px;color:#abc0d3;font-weight:500}
+    .hero{position:absolute;z-index:2;left:2415px;right:195px;top:335px;display:grid;gap:54px}
+    .card{height:305px;border:6px solid #38506a;border-radius:66px;padding:40px 66px;background:linear-gradient(135deg,#102945,#0a1f38);box-shadow:0 36px 84px #020b1680;display:flex;align-items:center;justify-content:center}
+    .circle{width:190px;height:190px;border-radius:50%;display:grid;place-items:center;border:15px solid #fff;box-shadow:0 0 45px currentColor}
+    .blue{background:#2379e8;color:#2379e8}.yellow{background:#f4b400;color:#f4b400}.red{background:#ef3d3a;color:#ef3d3a}
+    .circle svg{width:120px;height:120px}
+  </style>
+</head>
+<body>
+  <div class="canvas">
+    <div class="accent"></div>
+    <section class="copy">
+      <div class="pill">월요일 전 · 주말 점검</div>
+      <main class="main"><div class="line1">주말엔 딱 3개</div><div class="line2">무엇을 볼까?</div><div class="badge">확인 기준</div></main>
+      <div class="footer">코스피 5% 급락 뒤 · 주말 점검</div>
+    </section>
+    <section class="hero">
+      <div class="card"><div class="circle blue"><svg viewBox="0 0 120 120"><path d="M22 62L48 88L99 32" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+      <div class="card"><div class="circle yellow"><svg viewBox="0 0 120 120"><path d="M22 62L48 88L99 32" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+      <div class="card"><div class="circle red"><svg viewBox="0 0 120 120"><path d="M22 62L48 88L99 32" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    </section>
+  </div>
+  <script>if(new URLSearchParams(location.search).get('base')==='1'){document.querySelector('.copy').style.display='none';document.querySelector('.hero').style.display='none'}</script>
+</body></html>
